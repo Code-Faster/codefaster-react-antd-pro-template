@@ -1,0 +1,75 @@
+{
+  "name": "codefaster-react-antd-pro-template",
+  "version": "0.0.1",
+  "description": "admin 管理系统，技术栈 react ant design pro typescript",
+  "main": "dist/index.common.js",
+  "module": "dist/index.esm.js",
+  "unpkg": "dist/index.js",
+  "jsdelivr": "dist/index.js",
+  "repository": "https://github.com/Code-Faster/codefaster-react-antd-pro-template.git",
+  "author": "libiqi <libiqi@diffshop.com>",
+  "license": "MIT",
+  "keywords": [
+    "Admin",
+    "react",
+    "ant design",
+    "ant design pro",
+    "typescript"
+  ],
+  "typings": "types/index.d.ts",
+  "files": [
+    "src/*.js",
+    "dist/*.js",
+    "dist/playground",
+    "dist/.cfignore",
+    "types/*.d.ts"
+  ],
+  "gitHooks": {
+    "pre-commit": "lint-staged",
+    "commit-msg": "node scripts/verifyCommitMsg.js"
+  },
+  "scripts": {
+    "dev": "node dist/index.common.js",
+    "dev:dist": "rollup -wm -c build/rollup.dev.config.js",
+    "build": "node build/build.js",
+    "lint": "eslint src examples test",
+    "test": "npm run lint && npm run test:unit && npm run test:types",
+    "test:unit": "jest",
+    "test:types": "tsc -p types/test",
+    "docs": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "changelog": "conventional-changelog -p angular -r 2 -i CHANGELOG.md -s",
+    "release": "bash scripts/release.sh",
+    "commit": "git-cz"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-typescript": "^7.16.0",
+    "@rollup/plugin-buble": "^0.21.3",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@rollup/plugin-replace": "^3.0.0",
+    "@types/jest": "^27.0.3",
+    "@types/parse-gitignore": "^1.0.0",
+    "eslint": "^8.6.0",
+    "eslint-plugin-jasmine": "^4.1.3",
+    "jest": "^27.4.3",
+    "rollup": "^2.60.2",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-typescript2": "^0.31.1",
+    "terser": "^5.10.0",
+    "typescript": "^4.5.2",
+    "vuepress": "^1.8.2",
+    "conventional-changelog-cli": "^2.1.1"
+  },
+  "bugs": {
+    "url": "https://github.com/Code-Faster/codefaster-react-antd-pro-template/issues"
+  },
+  "homepage": "https://github.com/Code-Faster/codefaster-react-antd-pro-template#readme",
+  "dependencies": {
+    "parse-gitignore": "^1.0.1"
+  }
+}
