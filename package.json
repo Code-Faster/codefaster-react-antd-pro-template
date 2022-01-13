@@ -1,6 +1,6 @@
 {
   "name": "codefaster-react-antd-pro-template",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "admin 管理系统，技术栈 react ant design pro typescript",
   "main": "dist/index.common.js",
   "module": "dist/index.esm.js",
