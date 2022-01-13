@@ -17,11 +17,26 @@ export default function (
    * 根据传递的参数生成template需要的参数
    */
   const tableColArr = params.model.tableCloums;
-  const template = `
-export interface ${pojo} {
+  const template = `export interface ${pojo} {
   ${tableColArr
     .map((ele: CodeFaster.SqlColumn) => {
-      return ele.columnName + "?:" + ele.columnType + ";";
+      let type = ele.columnType;
+      if (
+        ele.columnType === "Long" ||
+        ele.columnType === "Integer" ||
+        ele.columnType === "Double" ||
+        ele.columnType === "Float" ||
+        ele.columnType === "BigDecimal"
+      ) {
+        type = "number";
+      }
+      if (ele.columnType === "Boolean") {
+        type = "boolean";
+      }
+      if (ele.columnType === "String") {
+        type = "string";
+      }
+      return ele.columnName + "?:" + type + ";";
     })
     .join("\r\n\t")}
 }

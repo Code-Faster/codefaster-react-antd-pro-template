@@ -1,0 +1,63 @@
+{
+    "tableCloums": [
+        {
+            "columnComment": "",
+            "columnName": "id",
+            "columnType": "Long"
+        },
+        {
+            "columnComment": "用户ID",
+            "columnName": "personId",
+            "columnType": "Long"
+        },
+        {
+            "columnComment": "文章ID",
+            "columnName": "newsId",
+            "columnType": "Long"
+        },
+        {
+            "columnComment": "举报原因",
+            "columnName": "reportReasons",
+            "columnType": "String"
+        },
+        {
+            "columnComment": "举报类型【数据字典配置】1、政治2、色情3、价值观4、广告5、其他",
+            "columnName": "reportType",
+            "columnType": "Integer"
+        },
+        {
+            "columnComment": "举报进度1、已处理2、未处理3、已忽略",
+            "columnName": "status",
+            "columnType": "Integer"
+        },
+        {
+            "columnComment": "处理人ID",
+            "columnName": "handleUserId",
+            "columnType": "Long"
+        },
+        {
+            "columnComment": "处理人",
+            "columnName": "handleUser",
+            "columnType": "String"
+        },
+        {
+            "columnComment": "处理时间",
+            "columnName": "handleTime",
+            "columnType": "Date"
+        },
+        {
+            "columnComment": "创建时间",
+            "columnName": "createTime",
+            "columnType": "Date"
+        },
+        {
+            "columnComment": "更新时间",
+            "columnName": "updateTime",
+            "columnType": "Date"
+        }
+    ],
+    "dbName": "t_feilang_data",
+    "tableComment": "举报表",
+    "tableName": "t_report",
+    "tableSql": "CREATE TABLE IF NOT EXISTS t_feilang_data.t_report (\n           ' id' LONG  NOT NULL COMMENT  'id',\n          \n            'person_id' LONG  NULL DEFAULT NULL COMMENT  '用户ID',\n          \n            'news_id' LONG  NULL DEFAULT NULL COMMENT  '文章ID',\n          \n            'report_reasons' STRING  NULL DEFAULT NULL COMMENT  '举报原因',\n          \n            'report_type' INTEGER  NULL DEFAULT NULL COMMENT  '举报类型【数据字典配置】1、政治2、色情3、价值观4、广告5、其他',\n          \n            'status' INTEGER  NULL DEFAULT NULL COMMENT  '举报进度1、已处理2、未处理3、已忽略',\n          \n            'handle_user_id' LONG  NULL DEFAULT NULL COMMENT  '处理人ID',\n          \n            'handle_user' STRING  NULL DEFAULT NULL COMMENT  '处理人',\n          \n            'handle_time' DATE  NULL DEFAULT NULL COMMENT  '处理时间',\n          \n            'create_time' DATE  NULL DEFAULT NULL COMMENT  '创建时间',\n          \n            'update_time' DATE  NULL DEFAULT NULL COMMENT  '更新时间',\n          PRIMARY KEY (`id`), UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE) ENGINE = InnoDB COMMENT = 举报表"
+}

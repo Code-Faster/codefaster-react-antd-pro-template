@@ -53,5 +53,5 @@ export async function update(body: ${pojo}, options?: { [key: string]: any }) {
   });
 }
         `;
-  fs.writeFileSync(path.join(params.releasePath, pojo + "/api.ds"), template);
+  fs.writeFileSync(path.join(params.releasePath, pojo + "/api.ts"), template);
 }

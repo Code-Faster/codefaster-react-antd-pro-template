@@ -1,4 +1,5 @@
 import path from "path";
+import fs from "fs";
 import { TemplateTools } from "../../../src/template";
 import CodeGenerator from "../../../src/index";
 const project = {
@@ -17,26 +18,6 @@ const templateObj = {
   isDir: true,
   children: [],
 };
-const model = {
-  // 表名
-  tableName: "T_TEST",
-  // 注释
-  tableComment: "generatorVO",
-  // 表单字段数组
-  tableCloums: [
-    { columnComment: "ID", columnType: "Long", columnName: "id" },
-    {
-      columnComment: "用户id",
-      columnType: "Long",
-      columnName: "personId",
-    },
-    {
-      columnComment: " 加时间",
-      columnType: "Date",
-      columnName: "inputDate",
-    },
-  ],
-};
 describe("TemplateTools", () => {
   it("init should work", () => {
     const tools = new TemplateTools(project);
@@ -45,7 +26,7 @@ describe("TemplateTools", () => {
   it("updateProjectConfig should work", () => {
     const tools = new TemplateTools(project);
     const obj = tools.updateProjectConfig();
-    expect(obj.children).toHaveLength(1);
+    expect(obj.children).toHaveLength(2);
   });
   it("fileDisplay should work", () => {
     const tools = new TemplateTools(project);
@@ -56,11 +37,23 @@ describe("TemplateTools", () => {
 
 describe("CodeGenerator", () => {
   it("generatorPage should work", () => {
+    const baseDir = path.join(__dirname, "../../../examples");
+    const files = fs.readdirSync(baseDir);
     const code = new CodeGenerator(project);
-    code.generatorPage({
-      props: {},
-      model: model,
-      releasePath: path.join(__dirname, "../../../playground/test"),
+    files.forEach((fileName) => {
+      // 获取当前文件的绝对路径
+      const filedir = path.join(baseDir, fileName);
+      // 根据文件路径获取文件信息，返回一个fs.Stats对象
+      const stats = fs.statSync(filedir);
+      const isFile = stats.isFile(); // 是文件
+      if (isFile) {
+        const data = fs.readFileSync(filedir, "utf8");
+        code.generatorPage({
+          props: {},
+          model: JSON.parse(data),
+          releasePath: path.join(__dirname, "../../../playground/test"),
+        });
+      }
     });
   });
 });
