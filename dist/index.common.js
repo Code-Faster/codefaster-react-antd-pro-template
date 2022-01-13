@@ -1,5 +1,5 @@
 /*!
-  * code-dubbo-template v0.0.1
+  * code-dubbo-template v0.0.2
   * (c) 2022 biqi li
   * @license MIT
   */
@@ -554,8 +554,22 @@ function model (project, params) {
    */
 
   var tableColArr = params.model.tableCloums;
-  var template = "\nexport interface ".concat(pojo, " {\n  ").concat(tableColArr.map(function (ele) {
-    return ele.columnName + "?:" + ele.columnType + ";";
+  var template = "export interface ".concat(pojo, " {\n  ").concat(tableColArr.map(function (ele) {
+    var type = ele.columnType;
+
+    if (ele.columnType === "Long" || ele.columnType === "Integer" || ele.columnType === "Double" || ele.columnType === "Float" || ele.columnType === "BigDecimal") {
+      type = "number";
+    }
+
+    if (ele.columnType === "Boolean") {
+      type = "boolean";
+    }
+
+    if (ele.columnType === "String") {
+      type = "string";
+    }
+
+    return ele.columnName + "?:" + type + ";";
   }).join("\r\n\t"), "\n}\n\nexport interface PageParams {\n  sorter?: string;\n  status?: string;\n  key?: number;\n  current?: number;\n  pageSize?: number;\n}\n        ");
   fs__default["default"].writeFileSync(path__default["default"].join(params.releasePath, pojo + "/model.d.ts"), template);
 }
@@ -571,7 +585,7 @@ function api (project, params) {
   var pojo = tranformHumpStr(params.model.tableName);
   var pojoVariable = getParamVariableFormat(pojo);
   var template = "\n// @ts-ignore\n/* eslint-disable */\nimport { request } from 'umi';\nimport { ".concat(pojo, ", PageParams } from './model';\n\n/** \u5206\u9875\u67E5\u8BE2*/\nexport async function findPage(body: PageParams, options?: { [key: string]: any }) {\n  return request<API.PageList>('/api/").concat(pojoVariable, "/find").concat(pojo, "Page', {\n      method: 'POST',\n      requestType: 'json',\n      data: body,\n      ...(options || {}),\n  });\n}\n\n/** \u65B0\u589E */\nexport async function add(body: ").concat(pojo, ", options?: { [key: string]: any }) {\n  return request<API.ApiResult>('/api/").concat(pojoVariable, "/save").concat(pojo, "', {\n      method: 'POST',\n      headers: {\n      'Content-Type': 'application/json',\n      },\n      data: body,\n      ...(options || {}),\n  });\n}\n\n/** \u66F4\u65B0 */\nexport async function update(body: ").concat(pojo, ", options?: { [key: string]: any }) {\n  return request<API.ApiResult>('/api/").concat(pojoVariable, "/update").concat(pojo, "', {\n      method: 'POST',\n      headers: {\n      'Content-Type': 'application/json',\n      },\n      data: body,\n      ...(options || {}),\n  });\n}\n        ");
-  fs__default["default"].writeFileSync(path__default["default"].join(params.releasePath, pojo + "/api.ds"), template);
+  fs__default["default"].writeFileSync(path__default["default"].join(params.releasePath, pojo + "/api.ts"), template);
 }
 
 var CodeGenerator = /*#__PURE__*/function () {
