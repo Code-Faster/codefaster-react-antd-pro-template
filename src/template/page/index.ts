@@ -27,6 +27,7 @@ import ProTable from '@ant-design/pro-table';
 import { BetaSchemaForm, ProFormColumnsType } from '@ant-design/pro-form';
 import { findPage, add, update } from './api';
 import type { ${pojo} } from './model';
+import { Form } from 'antd/es';
 
 const { Title, Paragraph } = Typography;
 /**
@@ -77,7 +78,7 @@ const TableList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const updateRef = useRef<FormInstance>();
+  const [updateRef] = Form.useForm();
   const [currentRow, setCurrentRow] = useState<${pojo}>();
   const columns: ProFormColumnsType<${pojo}>[] = [
     {
@@ -124,7 +125,7 @@ const TableList: React.FC = () => {
     },
   ];
   useEffect(() => {
-    updateRef.current?.setFieldsValue(currentRow);
+    if (updateModalVisible) updateRef.setFieldsValue(currentRow);
     return () => {
 
     }
@@ -159,6 +160,7 @@ const TableList: React.FC = () => {
         visible={createModalVisible}
         onVisibleChange={handleModalVisible}
         layoutType='ModalForm'
+        modalProps={{ destroyOnClose: true, maskClosable: false }}
         onFinish={async (value) => {
           const success = await handleAdd(value as ${pojo});
           if (success) {
@@ -174,7 +176,7 @@ const TableList: React.FC = () => {
       <BetaSchemaForm<${pojo}>
         title="编辑"
         layout="horizontal"
-        formRef={updateRef}
+        form={updateRef}
         visible={updateModalVisible}
         onVisibleChange={handleUpdateModalVisible}
         layoutType='ModalForm'
