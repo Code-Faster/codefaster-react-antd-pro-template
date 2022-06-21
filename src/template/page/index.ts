@@ -78,6 +78,7 @@ const TableList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
+  const [addRef] = Form.useForm();
   const [updateRef] = Form.useForm();
   const [currentRow, setCurrentRow] = useState<${pojo}>();
   const columns: ProFormColumnsType<${pojo}>[] = [
@@ -160,10 +161,11 @@ const TableList: React.FC = () => {
         visible={createModalVisible}
         onVisibleChange={handleModalVisible}
         layoutType='ModalForm'
-        modalProps={{ destroyOnClose: true, maskClosable: false }}
+        form={addRef}
         onFinish={async (value) => {
           const success = await handleAdd(value as ${pojo});
           if (success) {
+            addRef.resetFields();
             handleModalVisible(false);
             if (actionRef.current) {
               setCurrentRow(undefined);
