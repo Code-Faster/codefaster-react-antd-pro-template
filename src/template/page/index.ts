@@ -19,17 +19,16 @@ export default function (
 
   const template = `
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message,  FormInstance, Space, Image, Typography } from 'antd';
+import { Button, message } from 'antd';
 import React, { useState, useRef, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { BetaSchemaForm, ProFormColumnsType } from '@ant-design/pro-form';
+import { BetaSchemaForm } from '@ant-design/pro-form';
 import { findPage, add, update } from './api';
 import type { ${pojo} } from './model';
 import { Form } from 'antd/es';
 
-const { Title, Paragraph } = Typography;
 /**
  * 添加
  *
@@ -40,10 +39,9 @@ const handleAdd = async (fields: ${pojo}) => {
   const hide = message.loading('正在添加');
 
   try {
-    await add({ ...fields });
+    const json = await add({ ...fields });
     hide();
-    message.success('添加成功');
-    return true;
+    return json.success;
   } catch (error) {
     hide();
     message.error('添加失败请重试！');
@@ -57,16 +55,15 @@ const handleAdd = async (fields: ${pojo}) => {
  */
 
 const handleUpdate = async (fields: ${pojo}) => {
-  const hide = message.loading('正在配置');
+  const hide = message.loading('正在更新');
 
   try {
-    await update(fields);
+    const json = await update(fields);
     hide();
-    message.success('配置成功');
-    return true;
+    return json.success;
   } catch (error) {
     hide();
-    message.error('配置失败请重试！');
+    message.error('更新失败请重试！');
     return false;
   }
 };
@@ -81,11 +78,12 @@ const TableList: React.FC = () => {
   const [addRef] = Form.useForm();
   const [updateRef] = Form.useForm();
   const [currentRow, setCurrentRow] = useState<${pojo}>();
-  const columns: ProFormColumnsType<${pojo}>[] = [
+  const columns: ProColumns<${pojo}>[] = [
     {
       title: '序号',
       dataIndex: 'index',
       valueType: 'indexBorder',
+      width:'50px',
     },
     ${params.model.tableCloums
       .map((ele) => {
@@ -93,9 +91,9 @@ const TableList: React.FC = () => {
     {
       dataIndex: '${ele.columnName}',
       title: '${ele.columnComment}',
-      width: 'm',
-      hideInTable: true,
+      hideInTable: false,
       hideInSearch: true,
+      hideInForm: false,
       formItemProps: {
         rules: [
           {
@@ -112,11 +110,21 @@ const TableList: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       hideInDescriptions: true,
+      width: '200px',
       render: (_, record) => [
         <a
           key="edit"
           onClick={() => {
-            setCurrentRow(record);
+            setCurrentRow(
+              Object.fromEntries(
+                Object.entries(record).map((e) => {
+                  if ('number' === typeof e[1]) {
+                    e[1] = e[1].toString();
+                  }
+                  return e;
+                }),
+              ),
+            );
             handleUpdateModalVisible(true);
           }}
         >
@@ -136,6 +144,7 @@ const TableList: React.FC = () => {
       <ProTable<${pojo}>
         headerTitle="查询表格"
         actionRef={actionRef}
+        bordered
         rowKey="id"
         search={{
           labelWidth: 120,
@@ -153,7 +162,7 @@ const TableList: React.FC = () => {
           </Button>,
         ]}
         request={findPage}
-        columns={columns as ProColumns<${pojo}>[]}
+        columns={columns}
       />
       <BetaSchemaForm<${pojo}>
         title="新增"
@@ -173,7 +182,7 @@ const TableList: React.FC = () => {
             }
           }
         }}
-        columns={columns}
+        columns={columns as any}
       />
       <BetaSchemaForm<${pojo}>
         title="编辑"
@@ -194,7 +203,7 @@ const TableList: React.FC = () => {
             }
           }
         }}
-        columns={columns}
+        columns={columns as any}
       />
     </PageContainer>
   );

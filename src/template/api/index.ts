@@ -17,10 +17,10 @@ export default function (
 // @ts-ignore
 /* eslint-disable */
 import { request } from 'umi';
-import { ${pojo}, PageParams } from './model';
+import { ${pojo} } from './model';
 
 /** 分页查询*/
-export async function findPage(body: PageParams, options?: { [key: string]: any }) {
+export async function findPage(body: ${pojo}, options?: { [key: string]: any }) {
   return request<API.PageList>('/api/${pojoVariable}/find${pojo}Page', {
       method: 'POST',
       requestType: 'json',

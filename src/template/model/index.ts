@@ -17,7 +17,7 @@ export default function (
    * 根据传递的参数生成template需要的参数
    */
   const tableColArr = params.model.tableCloums;
-  const template = `export interface ${pojo} {
+  const template = `export interface ${pojo} extends API.PageParams  {
   ${tableColArr
     .map((ele: CodeFaster.SqlColumn) => {
       let type = ele.columnType;
@@ -36,17 +36,9 @@ export default function (
       if (ele.columnType === "String") {
         type = "string";
       }
-      return ele.columnName + "?:" + type + ";";
+      return ele.columnName + "?:" + type + "; //" + ele.columnComment;
     })
     .join("\r\n\t")}
-}
-
-export interface PageParams {
-  sorter?: string;
-  status?: string;
-  key?: number;
-  current?: number;
-  pageSize?: number;
 }
         `;
   fs.writeFileSync(
